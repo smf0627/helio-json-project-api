@@ -4,9 +4,10 @@ const router = new Router();
 
 router.route('/')
   .get((req, res) => {
+    const { pageSize = 100, index = 0 } = req.query;
     const services = req.app.get('services');
     
-    return services.restaurants.all()
+    return services.restaurants.all(index, pageSize)
       .then(restaurants => {
         return res.json(restaurants);
       })
@@ -31,26 +32,20 @@ router.get('/top-rated', (req, res) => {
 });
 
 router.route('/:id')
-  .use((req, res, next) => {
-    req.id = req.params.id;
-    req.services = req.app.get('services');
-    
-    return next();
-  })
   .get((req, res) => {
-    const { services } = req;
-    
-    return services.restaurants.findById(req.id);
-    
-    return res.json({});
+    const { id } = req.params;
+    const services = req.app.get('services');
+    return services.restaurants.findById(id).then(restaurant => res.json(restaurant));
   })
   .put((req, res) => {
-    const { services } = req;
+    const { id } = req.params;
+    const services = req.app.get('services');
     
     return res.json({});
   })
   .delete((req, res) => {
-    const { services } = req;
+    const { id } = req.params;
+    const services = req.app.get('services');
     
     return res.json({});
   });
