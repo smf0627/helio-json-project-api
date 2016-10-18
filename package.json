@@ -10,7 +10,9 @@
     "prepublish": "npm run build",
     "build": "npm run build:clean; npm run build:compile",
     "build:compile": "babel src -s inline -d dist",
-    "build:clean": "rm -rf dist"
+    "build:clean": "rm -rf dist",
+    "predeploy": "npm run build",
+    "deploy": "modulus deploy -p restaurants"
   },
   "repository": {
     "type": "git",
