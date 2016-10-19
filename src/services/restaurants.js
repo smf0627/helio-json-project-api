@@ -17,6 +17,8 @@ export default {
    * @returns {*|Promise|T}
    */
   async all(index = 0, pageSize = 100){
+    index = parseInt(index);
+    pageSize = parseInt(pageSize);
     const cursor = await restaurants.find({}, { rawCursor: true });
     return await cursor.skip(index * pageSize).limit(pageSize).toArray();
   },

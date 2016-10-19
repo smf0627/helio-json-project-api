@@ -5,5 +5,6 @@ if (ENV !== 'production') {
   require('babel-polyfill');
   module.exports = require('./src');
 } else {
+  require('babel-polyfill');
   module.exports = require('./dist');
 }

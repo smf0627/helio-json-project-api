@@ -26,7 +26,9 @@
   },
   "homepage": "https://github.com/helio-training/restaurants-api#readme",
   "dependencies": {
+    "babel-polyfill": "^6.16.0",
     "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
     "express": "^4.14.0",
     "express-joi-validator": "^2.0.0",
     "monk": "^3.1.3"
