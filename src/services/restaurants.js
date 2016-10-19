@@ -59,7 +59,7 @@ export default {
     const result = await restaurants.findOne(id);
     
     if (!result) {
-      throw Boom.notFound(`Restaurant ${id} not found.`)
+      throw Boom.notFound(`Restaurant ${id} not found.`, { id, message: `Restaurant ${id} not found.` })
     }
     return result;
   },
@@ -94,7 +94,7 @@ export default {
     if (restaurant._id) {
       delete restaurant._id;
     }
-  
+    
     await restaurants.findOneAndUpdate(id, restaurant);
     return await this.findById(id);
   },
