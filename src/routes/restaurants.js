@@ -11,6 +11,11 @@ const RestaurantModel = Joi.object().keys({
     street: Joi.string().trim().label('Street'),
     zipcode: Joi.string().trim().min(5).max(11).label('Zip')
   }),
+  grades: Joi.array().items(Joi.object().keys({
+    date: Joi.date(),
+    grade: Joi.string().max(1).trim().uppercase(),
+    score: Joi.number().max(10).min(0)
+  })),
   borough: Joi.string().min(2).trim().label('Borough'),
 });
 
@@ -29,7 +34,7 @@ const router = new Router();
 // },
 //   "borough": "Manhattan",
 //   "cuisine": "Other",
-//   "grades": [],
+//   "grades": [{ "date": "2014-08-01T00:00:00.000Z", "grade": "A",  "score": 7}],
 //   "name": "Test",
 //   "restaurant_id": "50003171"
 // }
@@ -49,6 +54,7 @@ router.route('/')
   })
   .post(Validator({ body: RestaurantModel.requiredKeys('', 'name', 'address.building', 'address.street', 'address.zipcode', 'borough', 'cuisine') }), (req, res) => {
     const restaurant = req.body;
+    const services = req.app.get('services');
     
     return services.restaurants.create(restaurant)
       .then(result => res.status(201).json(result));
@@ -72,6 +78,7 @@ router.route('/:id')
   .get((req, res) => {
     const { id } = req.params;
     const services = req.app.get('services');
+    
     return services.restaurants.findById(id)
       .then(restaurant => res.json(restaurant));
   })
