@@ -1,4 +1,5 @@
 import DB from './infrastructure/db';
+import Boom from 'boom';
 
 const restaurants = DB.get('restaurants');
 
@@ -55,7 +56,12 @@ export default {
    * @returns {Promise|*}
    */
   async findById(id) {
-    return await restaurants.findOne(id);
+    const result = await restaurants.findOne(id);
+    
+    if (!result) {
+      throw Boom.notFound(`Restaurant ${id} not found.`)
+    }
+    return result;
   },
   
   /**
@@ -77,12 +83,20 @@ export default {
    * @public
    *
    * @param {String} id
-   * @param {Object} restaurant
+   * @param {Object} fields
    *
    * @returns {*}
    */
-  async update(id, restaurant = {}) {
-    return await restaurants.update(id, restaurant);
+  async update(id, fields = {}) {
+    const old = await this.findById(id);
+    const restaurant = Object.assign({}, old, fields);
+    
+    if (restaurant._id) {
+      delete restaurant._id;
+    }
+  
+    await restaurants.findOneAndUpdate(id, restaurant);
+    return await this.findById(id);
   },
   
   /**

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import Joi from 'joi';
 import Validator from 'express-joi-validator';
 
+
 const RestaurantModel = Joi.object().keys({
   name: Joi.string().min(3).trim().label('Name'),
   cuisine: Joi.string().min(2).trim().label('Cuisine'),
@@ -21,23 +22,7 @@ const RestaurantModel = Joi.object().keys({
 
 const router = new Router();
 
-// {
-//   "_id": "580681b6fa3bd76f675c7c34",
-//   "address": {
-//   "building": "59",
-//     "coord": [
-//     -74.00790599999999,
-//     40.708772
-//   ],
-//     "street": "Maiden Lane",
-//     "zipcode": "10038"
-// },
-//   "borough": "Manhattan",
-//   "cuisine": "Other",
-//   "grades": [{ "date": "2014-08-01T00:00:00.000Z", "grade": "A",  "score": 7}],
-//   "name": "Test",
-//   "restaurant_id": "50003171"
-// }
+
 
 router.route('/')
   .get((req, res) => {
@@ -103,7 +88,7 @@ router.route('/:id')
     const services = req.app.get('services');
     
     return services.restaurants.remove(id)
-      .then(result => res.status(204))
+      .then(result => res.json(result))
   });
 
 
