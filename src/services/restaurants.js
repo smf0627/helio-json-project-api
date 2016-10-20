@@ -43,7 +43,7 @@ export default {
    * @returns {*|Promise|T}
    */
   async topRated(){
-    return await restaurants.find({});
+    return await restaurants.find({ 'grades.grade': { $in: ['A'] } });
   },
   
   /**
