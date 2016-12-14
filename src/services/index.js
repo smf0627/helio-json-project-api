@@ -1,12 +1,12 @@
-import restaurants from './restaurants';
+import schemata from './schemata';
 
 /**
  * Services
  *
  * @public
  *
- * @property restaurants
+ * @property schemata
  */
 export default {
-  restaurants
+  schemata
 };

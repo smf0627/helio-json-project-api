@@ -1,17 +1,17 @@
 import DB from './infrastructure/db';
 import Boom from 'boom';
 
-const restaurants = DB.get('restaurants');
+const schemata = DB.get('schemata');
 
 /**
- * Restaurants Service
+ * Schemata Service
  *
  * @public
  */
 export default {
-  
+
   /**
-   * All the restaurants
+   * All the schemata
    *
    * @public
    *
@@ -20,10 +20,10 @@ export default {
   async all(index = 0, pageSize = 100){
     index = parseInt(index);
     pageSize = parseInt(pageSize);
-    const cursor = await restaurants.find({}, { rawCursor: true });
+    const cursor = await schemata.find({}, { rawCursor: true });
     return await cursor.skip(index * pageSize).limit(pageSize).toArray();
   },
-  
+
   /**
    * Only the favorites
    *
@@ -32,9 +32,9 @@ export default {
    * @returns {*|Promise|T}
    */
   async favorites(){
-    return await restaurants.find({ isFavorite: true });
+    return await schemata.find({ isFavorite: true });
   },
-  
+
   /**
    * Only the Top Rated
    *
@@ -43,42 +43,42 @@ export default {
    * @returns {*|Promise|T}
    */
   async topRated(){
-    return await restaurants.find({ 'grades.grade': { $in: ['A'] } });
+    return await schemata.find({ 'grades.grade': { $in: ['A'] } });
   },
-  
+
   /**
-   * Find a restaurant by its Id
+   * Find a schemata by its Id
    *
    * @public
    *
-   * @param {String|ObjectId} id - The id of the restaurant
+   * @param {String|ObjectId} id - The id of the schema
    *
    * @returns {Promise|*}
    */
   async findById(id) {
-    const result = await restaurants.findOne(id);
-    
+    const result = await schemata.findOne(id);
+
     if (!result) {
-      throw Boom.notFound(`Restaurant ${id} not found.`, { id, message: `Restaurant ${id} not found.` })
+      throw Boom.notFound(`Schema ${id} not found.`, { id, message: `Schema ${id} not found.` })
     }
     return result;
   },
-  
+
   /**
-   * Creates a new restaurant
+   * Creates a new schema
    *
    * @public
    *
-   * @param {Object} restaurant
+   * @param {Object} schema
    *
    * @returns {Promise|*}
    */
-  async create(restaurant = {}) {
-    return await restaurants.insert(restaurant);
+  async create(schema = {}) {
+    return await schemata.insert(schema);
   },
-  
+
   /**
-   * Updates a restaurant
+   * Updates a schema
    *
    * @public
    *
@@ -89,18 +89,18 @@ export default {
    */
   async update(id, fields = {}) {
     const old = await this.findById(id);
-    const restaurant = Object.assign({}, old, fields);
-    
-    if (restaurant._id) {
-      delete restaurant._id;
+    const schema = Object.assign({}, old, fields);
+
+    if (schema._id) {
+      delete schema._id;
     }
-    
-    await restaurants.findOneAndUpdate(id, restaurant);
+
+    await schemata.findOneAndUpdate(id, schema);
     return await this.findById(id);
   },
-  
+
   /**
-   * Deletes a restaurant
+   * Deletes a schema
    *
    * @public
    *
@@ -109,6 +109,6 @@ export default {
    * @returns {*|Promise|void|Object}
    */
   async remove(id) {
-    return await restaurants.remove(id);
+    return await schemata.remove(id);
   }
 }
