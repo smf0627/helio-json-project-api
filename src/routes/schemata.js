@@ -4,10 +4,10 @@ import Validator from 'express-joi-validator';
 
 
 const SchemaModel = Joi.object().keys({
-  name: Joi.string().min(3).trim().label('Name'),
-  schema: Joi.string().min(2).trim().label('Schema'),
-  uri: Joi.string().min(2).trim().label('uri'),
-  isActive: Joi.string().min(2).trim().label('Active'),
+  name: Joi.string().trim().label('Name'),
+  schema: Joi.any().label('Schema'),
+  uri: Joi.string().trim().label('uri'),
+  isActive: Joi.boolean().label('Active'),
 
   // address: Joi.object().keys({
   //   building: Joi.string().trim().label('Building'),
@@ -42,7 +42,7 @@ router.route('/')
   .post(Validator({ body: SchemaModel.requiredKeys('', 'name', 'schema', 'uri', 'isActive')  }), (req, res) => {
     const schema = req.body;
     const services = req.app.get('services');
-
+    console.log(schema);
     return services.schemata.create(schema)
       .then(result => res.status(201).json(result))
       .catch(err => {
